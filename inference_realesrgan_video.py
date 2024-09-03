@@ -32,7 +32,11 @@ def get_video_meta_info(video_path):
     ret['height'] = video_streams[0]['height']
     ret['fps'] = eval(video_streams[0]['avg_frame_rate'])
     ret['audio'] = ffmpeg.input(video_path).audio if has_audio else None
-    ret['nb_frames'] = int(video_streams[0]['nb_frames'])
+    try:
+      ret['nb_frames'] = int(video_streams[0]['nb_frames'])
+    except KeyError:
+
+      ret['nb_frames'] = int(eval(video_streams[0]['avg_frame_rate']) * float(video_streams[0]['duration']))
     return ret
 
 
